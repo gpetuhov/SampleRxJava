@@ -18,6 +18,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private Button button;
 
+    // Used to control several subscriptions all in one
+    // (in this sample we have only one subscription)
     private CompositeSubscription subscription;
 
     private int counter = 0;
@@ -43,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
             updateText();
 
             subscription = new CompositeSubscription();
+            // Observable emits numbers every 1 second (in a separate thread)
+            // subscriber receives numbers and updates TextView
+            // (in the main thread to be able to update UI).
             subscription.add(
                     Observable
                             .interval(1, TimeUnit.SECONDS)
@@ -55,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             );
 
         } else {
+            // To stop the counter we unsubscribe from the observable, that emits numbers
             if (subscription.hasSubscriptions()) {
                 subscription.unsubscribe();
             }
